@@ -1,0 +1,35 @@
+# Composer
+/vendor/
+composer.lock
+
+# PHPUnit
+/.phpunit.result.cache
+/phpunit.xml
+
+# IDE
+/.idea/
+/.vscode/
+*.sublime-workspace
+
+# Локальные настройки
+.env
+.env.local
+
+# Логи и кэш
+/logs/
+/cache/
+/tmp/
+
+# ОС
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Прочие
+*.log
+*.tmp
+*.bak
