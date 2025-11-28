@@ -1,0 +1,139 @@
+<div class="bg">
+    <!-- Заголовок формы создания поста -->
+    <h2 class="title"><?= htmlspecialchars($postCreateTitle) ?></h2>
+
+
+    <!-- Форма для создания поста -->
+    <form id="post-form" action="?page=create" method="post" autocomplete="off" enctype="multipart/form-data">
+        <!-- Поле для заголовка поста -->
+        <label for="title">Заголовок:</label><br>
+        <input
+            type="text"
+            name="title"
+            id="title"
+            value="<?= htmlspecialchars($title ?? '') ?>"
+            required
+            autocomplete="off"
+            aria-label="Заголовок поста"><br><br>
+
+        <!-- Вывод ошибки для поля «Заголовок», если она есть -->
+        <?php if (isset($errors['title']) && !empty($errors['title'])): ?>
+            <div class="error-container">
+                <span class="error"><?= htmlspecialchars($errors['title']) ?></span>
+            </div>
+        <?php endif; ?>
+
+        <!-- Выпадающий список для выбора категории (маршрута) -->
+        <label for="category_id">Маршрут:</label><br>
+        <select
+            name="category_id"
+            id="category_id"
+            required
+            aria-label="Выберите маршрут">
+            <option value="">Выбрать часть света</option>
+            <?php foreach ($categories as $id => $name): ?>
+                <option
+                    value="<?= htmlspecialchars((string)$id) ?>"
+                    <?= ($category_id ?? 0) == $id ? 'selected' : '' ?> >
+                    <?= htmlspecialchars($name ?? '') ?>
+                </option>
+            <?php endforeach; ?>
+        </select><br><br>
+
+        <!-- Вывод ошибки для поля «Маршрут», если она есть -->
+        <?php if (isset($errors['category_id']) && !empty($errors['category_id'])): ?>
+            <div class="error-container">
+                <span class="error"><?= htmlspecialchars($errors['category_id']) ?></span>
+            </div>
+        <?php endif; ?>
+
+        <!-- Текстовое поле для содержания поста -->
+        <label for="text">Содержание:</label><br>
+        <textarea
+            name="text"
+            id="text"
+            rows="15"
+            cols="75"
+            required
+            autocomplete="off"
+            aria-label="Текст поста"><?= htmlspecialchars((string)$text ?? '') ?>
+        </textarea><br><br>
+
+        <!-- Изображение -->
+        <div class="form-group">
+            <label for="image">Изображение к посту</label>
+            <input type="file"
+            id="image"
+            name="image"
+            accept="image/*"
+            class="form-control">
+            <small class="text-muted">Допустимые форматы: JPG, PNG, GIF. Макс. размер: 2 МБ</small>
+        </div>
+
+        <!-- Вывод ошибки для поля «Содержание», если она есть -->
+        <?php if (isset($errors['text']) && !empty($errors['text'])): ?>
+            <div class="error-container">
+                <span class="error"><?= htmlspecialchars($errors['text']) ?></span>
+            </div>
+        <?php endif; ?>
+
+        <!-- Кнопка отправки формы -->
+        <button class="create-btn" type="submit">Создать</button>
+    </form>
+
+    <!-- Блок с уведомлением (если есть сообщение для отображения) -->
+    <?php if (!empty($message)): ?>
+        <div class="message message-<?= htmlspecialchars($message_type) ?>"
+            role="alert"
+            aria-live="assertive"
+            aria-atomic="true">
+            <div class="message-body">
+                <?= htmlspecialchars($message) ?? '' ?>
+            </div>
+            <!-- Кнопка закрытия уведомления -->
+            <button type="button" class="close-message">&times;</button>
+        </div>
+    <?php endif; ?>
+</div>
+
+
+<script>
+'use strict';
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Находим элемент уведомления на странице
+    const message = document.querySelector('.message');
+
+    // Если уведомление существует — запускаем анимацию
+    if (message) {
+        // Плавное появление уведомления (через 100 мс)
+        setTimeout(() => {
+            message.style.opacity = '1';
+            message.style.transform = 'translateY(0)';
+        }, 100);
+
+        // Автоматическое скрытие через 4 секунды
+        setTimeout(() => {
+            message.style.opacity = '0';
+            message.style.transform = 'translateY(20px)';
+
+            // Удаление элемента из DOM через 400 мс после начала скрытия
+            setTimeout(() => message.remove(), 400);
+        }, 4000);
+
+        // Обработчик клика по кнопке закрытия (×)
+        const closeBtn = message.querySelector('.close-message');
+        closeBtn.addEventListener('click', () => {
+            // Плавное скрытие при клике
+            message.style.opacity = '0';
+            message.style.transform = 'translateY(20px)';
+            // Удаление элемента через 400 мс
+            setTimeout(() => message.remove(), 400);
+        });
+    }
+});
+</script>
+
+
+
+

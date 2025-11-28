@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Блог</title>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body class="<?php echo (isset($_SESSION['theme']) ? $_SESSION['theme'] : ''); ?>">
+    <div class="container">
+        <header>
+            <?= $menu ?>
+        </header>
+        <main>
+            <?= $content ?>
+        </main>
+    </div>
+</body>
+</html>

@@ -1,0 +1,13 @@
+<div class="calc-content">
+    <h2 class="title">Калькулятор:</h2>
+    <form action="?page=calc" method="post">
+        <input class="input-calc" type="text" name="arg1" size="5" value="<?= htmlspecialchars($arg1) ?>">
+        <button class="btn-calc" type="submit" name="operator" value="+">+</button>
+        <button class="btn-calc" type="submit" name="operator" value="-">-</button>
+        <button class="btn-calc" type="submit" name="operator" value="*">*</button>
+        <button class="btn-calc" type="submit" name="operator" value="/">/</button>
+        <input class="input-calc" type="text" name="arg2" size="5" value="<?= htmlspecialchars($arg2) ?>">
+        <input class="input-calc" type="text" readonly value="=" size="1">
+        <input class="input-calc" type="text" readonly size="20" value="<?= htmlspecialchars($result) ?>">
+    </form>
+</div>

@@ -1,0 +1,11 @@
+
+<?php
+session_start();
+?>
+<form class="author-form" action="?page=author" method="POST">
+    <label for="name">Введите имя:</label><br>
+    <input type="text" name="name" id="name" value="<?= htmlspecialchars($data['name'] ?? '') ?>" required><br><br>
+    <label for="password">Введите пароль:</label><br>
+    <input type="text" name="password" value="<?= htmlspecialchars($data['password'] ?? '') ?>" required><br><br>
+    <button type="submit" class="btn-author">Отправить</button>
+</form>

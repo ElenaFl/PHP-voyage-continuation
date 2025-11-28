@@ -1,0 +1,22 @@
+<?php
+session_start();
+?>
+<body class="<?php echo isset($_SESSION['theme']) ? $_SESSION['theme'] : ''; ?>"></body>
+<form class="form-theme" action="?page=theme" method="post">
+
+    <label class="radio-label" for="backgroundColorLigth">светлый</label>
+
+    <input class="radio" type="radio" name="radio" id="backgroundColorLigth" required value="backgroundColorLigth"
+    <?php if ($_SESSION['theme'] ?? '' === 'backgroundColorLigth') echo 'checked'; ?>><br><br>
+
+    <label class="radio-label" for="backgroundColorDark">тёмный</label>
+
+    <input type="radio" name="radio" id="backgroundColorDark" required value="backgroundColorDark"
+    <?php if ($_SESSION['theme'] ?? '' === 'backgroundColorDark') echo 'checked'; ?>><br><br>
+
+    <button class="radio-btn" type="submit">Отправить</button>
+</form>
+
+
+
+

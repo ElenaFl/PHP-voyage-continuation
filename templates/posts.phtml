@@ -1,0 +1,109 @@
+<?php
+// Получаем флэш‑сообщение и его тип из сессии (если есть)
+$flash_message = $_SESSION['flash_message'] ?? '';
+$flash_message_type = $_SESSION['flash_message_type'] ?? '';
+
+// Очищаем флэш‑сообщения из сессии после получения
+unset($_SESSION['flash_message']);
+unset($_SESSION['flash_message_type']);
+
+// Если есть сообщение для отображения — выводим блок уведомления
+if (!empty($flash_message)): ?>
+    <div class="message message-<?= htmlspecialchars($flash_message_type) ?>"
+        role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="message-body">
+            <!-- Текст сообщения (с экранированием HTML) -->
+            <?= htmlspecialchars($flash_message) ?? '' ?>
+        </div>
+        <!-- Кнопка закрытия сообщения -->
+        <button type="button" class="close-message">&times;</button>
+    </div>
+<?php endif; ?>
+
+<div class="title-post">
+    <!-- Заголовок страницы и кнопка создания нового поста -->
+    <h2 class="title"><?= htmlspecialchars($postsTitle); ?></h2>
+    <a class="create-btn" href="<?= BASE_URL ?>?page=create">Создать пост</a>
+</div>
+
+<div class="posts-content">
+    <!-- Основной блок с постами -->
+    
+    <?php if (!empty($posts)): ?>
+        <!-- Если посты есть — отображаем их в виде карточек -->
+        <?php foreach ($posts as $post): ?>
+            <div class="card">
+                <!-- Ссылка на полный пост (по id) -->
+                <a class="card-title" href="?page=post&id=<?= htmlspecialchars($post['id']); ?>">
+                    Пост №<?= htmlspecialchars($post['id']) ?>
+                </a>
+                
+                 <!-- Миниатюра изображения -->
+                <?php if (!empty($post['image'])): ?>
+                    <div class="post-thumbnail">
+                        <img src="uploads/posts/<?= urlencode($post['image']) ?>"
+                        alt="Миниатюра к посту"
+                        class="img-thumbnail" >
+                    </div>
+                <?php endif; ?>
+
+                <!-- Заголовок поста -->
+                <p class="card-title"><?= htmlspecialchars($post['title']) ?? '' ?></p>
+                
+                <!-- Категория поста (подтягивается из массива $categories по id) -->
+                <p class="card-category">
+                    <?= $categories[$post['category_id']]; ?>
+                </p>
+                <!-- Ссылка «Текст» — ведёт на страницу поста -->
+                <a class="card-text" href="?page=post&id=<?= htmlspecialchars($post['id']) ?? '' ?>">Текст</a>
+                <!-- Дата создания поста -->
+                <p class="card-date">Создан: <?= htmlspecialchars($post['created_at']) ?? '' ?></p>
+                
+                <!-- Если есть дата обновления — показываем её -->
+                <?php if (!empty($post['update_at'])): ?>
+                    <p class="card-date">Отредактирован: <?= htmlspecialchars($post['update_at']) ?? '' ?></p>
+                <?php endif; ?>
+            </div>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <!-- Если постов нет — выводим сообщение -->
+        <p>Нет постов для отображения</p>
+    <?php endif; ?>
+</div>
+
+<script>
+'use strict';
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Находим блок сообщения (если он есть на странице)
+    const message = document.querySelector('.message');
+
+    if (message) {
+        // Показываем сообщение с анимацией (плавное появление)
+        setTimeout(() => {
+            message.style.opacity = '1';
+            message.style.transform = 'translateY(0)';
+        }, 100);
+
+        // Автоматически скрываем сообщение через 4 секунды
+        setTimeout(() => {
+            message.style.opacity = '0';
+            message.style.transform = 'translateY(20px)';
+
+            // Удаляем элемент из DOM после завершения анимации (400 мс)
+            setTimeout(() => message.remove(), 400);
+        }, 4000);
+
+        // Обработчик клика по кнопке закрытия (×)
+        const closeBtn = message.querySelector('.close-message');
+        closeBtn.addEventListener('click', () => {
+            // Анимация закрытия
+            message.style.opacity = '0';
+            message.style.transform = 'translateY(20px)';
+            // Удаление элемента после анимации
+            setTimeout(() => message.remove(), 400);
+        });
+    }
+});
+</script>
+

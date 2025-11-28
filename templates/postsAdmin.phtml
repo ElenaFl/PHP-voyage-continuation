@@ -1,0 +1,50 @@
+
+<div class="posts-content">
+    <?php if (!empty($posts)): ?>
+        <?php foreach ($posts as $post): ?>
+            <div class="card">
+                <a class="card-title" href="?page=post&id=<?= htmlspecialchars($post['id']); ?>">
+                    Пост №<?= htmlspecialchars($post['id']) ?>
+                </a>
+                 <!-- Миниатюра изображения -->
+                <?php if (!empty($post['image'])): ?>
+                    <div class="post-thumbnail">
+                        <img src="uploads/posts/<?= urlencode($post['image']) ?>"
+                        alt="Миниатюра к посту"
+                        class="img-thumbnail" >
+                    </div>
+                <?php endif; ?>
+                <!-- Заголовок поста -->
+                <p class="card-title"><?= htmlspecialchars($post['title']) ?? '' ?></p>
+                <!-- Категория поста -->
+                <p class="card-category">
+                    <?= $categories[$post['category_id']]; ?>
+                </p>
+                <!--Текст поста -->
+                <p class="card-text"><?= htmlspecialchars($post['text']) ?? '' ?></p>
+            </div>
+            <div class="edit-delete-likes-forms">
+                <!-- Кнопка «Редактировать» -->
+                <form class="edit-form" action="<?= BASE_URL ?>" method="GET">
+                    <input type="hidden" name="page" value="editAdmin">
+                    <input type="hidden" name="id" value="<?= htmlspecialchars($post['id']) ?>">
+                    <button type="submit" class="btn-edit">Редактировать</button>
+                </form>
+
+                <!-- Кнопка «Удалить» с подтверждением -->
+                <form class="delete-form" action="<?= BASE_URL ?>" method="GET"
+                    onsubmit="return confirm('Удалить пост?')">
+                    <input type="hidden" name="page" value="deleteAdmin">
+                    <input type="hidden" name="id" value="<?= htmlspecialchars($post['id']) ?>">
+                    <button type="submit" class="btn-delete">Удалить</button>
+                </form>
+            </div>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <!-- Если постов нет — выводим сообщение -->
+        <p>Нет постов для отображения</p>
+    <?php endif; ?>
+</div>
+
+
+

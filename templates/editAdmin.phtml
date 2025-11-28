@@ -1,0 +1,155 @@
+<h2 class="title">Редактирование поста</h2>
+<?php if (isset($data)): ?> 
+<!-- Форма для редактирования поста -->
+<form id="post-form" action="?page=editAdmin&amp;id=<?= (int)$data['id'] ?? 0 ?>" method="post" autocomplete="off" enctype="multipart/form-data">
+    <!-- Скрытое поле с ID поста (передаётся на сервер при отправке формы) -->
+    <input type="hidden" name="id" value="<?= (int)$data['id'] ?? 0 ?>">
+
+    <!-- Поле для заголовка поста -->
+    <label for="title">Заголовок:</label><br>
+    <input
+        type="text"
+        name="title"
+        id="title"
+        value="<?= htmlspecialchars($data['title'] ?? '') ?>"
+        required
+        autocomplete="off"
+        aria-label="Заголовок поста"
+    ><br><br>
+
+    <!-- Вывод ошибки валидации для поля «Заголовок» -->
+    <?php if (isset($errors['title']) && !empty($errors['title'])): ?>
+        <div class="error-container">
+            <span class="error"><?= htmlspecialchars($errors['title']) ?></span>
+        </div>
+    <?php endif; ?>
+
+    <!-- Вывод сообщения о блокировке/запрете (если есть) -->
+    <?php if (isset($errors['banned']) && !empty($errors['banned'])): ?>
+        <div class="error-container">
+            <span class="error"><?= htmlspecialchars($errors['banned']) ?></span>
+        </div>
+    <?php endif; ?>
+
+    <!-- Выпадающий список для выбора категории (маршрута) -->
+    <label for="category_id">Маршрут:</label><br>
+    <select
+        name="category_id"
+        id="category_id"
+        required
+        aria-label="Выберите маршрут"
+    >
+        <option value="">Выбрать часть света</option>
+        <?php foreach ($categories as $id => $name): ?>
+            <option
+                value="<?= htmlspecialchars((int)$id) ?>"
+                <?= (int)($category_id ?? 0) === (int)$id ? 'selected' : '' ?>
+            >
+                <?= htmlspecialchars($name ?? '') ?>
+            </option>
+        <?php endforeach; ?>
+    </select><br><br>
+
+    <!-- Вывод ошибки валидации для поля «Маршрут» -->
+    <?php if (isset($errors['category_id']) && !empty($errors['category_id'])): ?>
+        <div class="error-container">
+            <span class="error"><?= htmlspecialchars($errors['category_id']) ?></span>
+        </div>
+    <?php endif; ?>
+   
+    <!-- Текстовое поле для содержания поста -->
+    <label for="text">Содержание:</label><br>
+    <textarea
+        name="text"
+        id="text"
+        rows="15"
+        cols="75"
+        required
+        autocomplete="off"
+        aria-label="Текст поста"
+    ><?= htmlspecialchars((string)$data['text'] ?? '') ?>
+    </textarea><br><br>
+
+    <!-- Вывод ошибки валидации для поля «Содержание» -->
+    <?php if (isset($errors['text']) && !empty($errors['text'])): ?>
+        <div class="error-container">
+            <span class="error"><?= htmlspecialchars($errors['text']) ?></span>
+        </div>
+    <?php endif; ?>
+
+    <!-- Повторный вывод сообщения о блокировке/запрете -->
+    <?php if (isset($errors['banned']) && !empty($errors['banned'])): ?>
+        <div class="error-container">
+            <span class="error"><?= htmlspecialchars($errors['banned']) ?></span>
+        </div>
+    <?php endif; ?>
+
+    <!-- Изображение -->
+    <div class="form-group">
+        <label for="image">Изображение к посту</label>
+        <input type="file"
+        id="image"
+        name="image"
+        accept="image/*"
+        class="form-control">
+        <small class="text-muted">Допустимые форматы: JPG, PNG, GIF. Макс. размер: 2 МБ</small>
+    </div>
+
+    <!-- Кнопка отправки формы (сохраняет изменения) -->
+    <button class="create-btn" type="submit">Отредактировать</button>
+</form>
+<?php else: ?>
+    <p>Нет роста для отображения</p>
+<?php endif; ?>
+
+<!-- Блок с уведомлением (показывается при наличии сообщения) -->
+<?php if (!empty($message)): ?>
+    <div class="message message-<?= htmlspecialchars($message_type) ?>"
+        role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="message-body">
+            <?= htmlspecialchars($message) ?? '' ?>
+        </div>
+        <!-- Кнопка закрытия уведомления -->
+        <button type="button" class="close-message">&times;</button>
+    </div>
+<?php endif; ?>
+
+</div>
+
+<script>
+'use strict';
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Находим элемент уведомления на странице
+    const message = document.querySelector('.message');
+
+    // Если уведомление существует — запускаем анимацию
+    if (message) {
+        // Плавное появление уведомления (через 100 мс)
+        setTimeout(() => {
+            message.style.opacity = '1';
+            message.style.transform = 'translateY(0)';
+        }, 100);
+
+        // Автоматическое скрытие через 4 секунды
+        setTimeout(() => {
+            message.style.opacity = '0';
+            message.style.transform = 'translateY(20px)';
+
+            // Удаление элемента из DOM через 400 мс после начала скрытия
+            setTimeout(() => message.remove(), 400);
+        }, 4000);
+
+        // Обработчик клика по кнопке закрытия (×)
+        const closeBtn = message.querySelector('.close-message');
+        closeBtn.addEventListener('click', () => {
+            // Плавное скрытие при клике
+            message.style.opacity = '0';
+            message.style.transform = 'translateY(20px)';
+            // Удаление элемента через 400 мс
+            setTimeout(() => message.remove(), 400);
+        });
+    }
+});
+</script>
+
