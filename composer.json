@@ -1,0 +1,24 @@
+{
+  "name": "domains/voayge",
+  "autoload": {
+    "files": [
+      "config/app.php",
+      "controllers/calcController.php",
+      "controllers/adminController.php",
+      "controllers/menuAdminController.php",
+      "controllers/usersController.php",
+      "controllers/mainController.php",
+      "controllers/menuController.php",
+      "controllers/postsController.php",
+      "models/render.php",
+      "models/functions.php"
+    ]
+  },
+  "authors": [
+    {
+      "name": "Елена",
+      "email": "n.a.092024@yandex.ru"
+    }
+  ],
+  "require": {}
+}
